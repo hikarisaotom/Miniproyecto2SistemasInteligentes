@@ -12,67 +12,56 @@ from pandas import ExcelWriter
 #para Generar graficas
 import matplotlib.pyplot as plt
 
-def tablas(datos):
+def preprocesar(datos):
+    datos=datos.replace(np.nan,'NA',regex=True)
+    datos=datos.replace("NO","No",regex=True)
+    return datos
+
+
+def generar(datos):
     #Lista de attributos discreto.
-    atributosDiscretos = ['sexo','dias_fiebre','dias_ultima_fiebre','nauseas','rash','vomitos','mialgias','artralgias','dolor_abdominal','acumulacion_fluidos','sangrado_mucosas','hemorragia','letargia','irritabilidad','shock','prueba_torniquete','hepatomegalia']
+    atributosContinuos = ["plaquetas","linfocitos","hematocritos","leucocitos"]
+    atributos=list(datos.columns.values)
     #Se inicializa el lector del archivo
     writer = pd.ExcelWriter('./GRAFICAS/estadisticas.xlsx', engine = 'xlsxwriter')
-    for atributo in atributosDiscretos: 
-        print("Generando ",atributo)
-        Cajas=[]
+    for atributo in atributos: 
         filtrado = datos[[atributo, "clase"]]
-        valores=pd.unique(datos[atributo]).tolist()
         temp1=[]
         temp3=[]
         temp2=[]
         temp4=[]
-        for opcion in valores:
-            box=[]
-            subSet =filtrado[filtrado[atributo] == opcion]
-            temp1.append(subSet[subSet['clase'] == 'No_Dengue'].shape[0])
-            temp2.append(subSet[subSet['clase'] == 'Dengue_NoGrave_NoSignos'].shape[0])
-            temp3.append(subSet[subSet['clase'] == 'Dengue_NoGrave_SignosAlarma'].shape[0])
-            temp4.append(subSet[subSet['clase'] == 'Dengue_Grave'].shape[0])
-            size=len(temp1)-1
-            box=[temp1[size],temp2[size],temp3[size],temp4[size]]
-            Cajas.append(box)
-        #Generando Archivo
-        archivo= pd.DataFrame({ atributo: valores,
-                    'No Dengue': temp1,
-                    'NNo signos Alerta': temp2,
-                    'Signos Alerta': temp3,
-                    'Dengue  Grave': temp4})
-        archivo.to_excel(writer, sheet_name=atributo,index=False)
-        #Generando Grafica
-        plt.boxplot(Cajas)
-        labels = valores
-        plt.xticks(np.arange(len(labels))+1,labels)
-        plt.title(atributo)
-        nombre="./GRAFICAS/"+atributo+".png"
-        plt.savefig(nombre)
-        plt.clf()
-
+        valores=pd.unique(datos[atributo]).tolist()
+        if not (atributo in atributosContinuos):#Generar tabla
+            for opcion in valores:
+                subSet =filtrado[filtrado[atributo] == opcion]
+                temp1.append(subSet[subSet['clase'] == 'No_Dengue'].shape[0])
+                temp2.append(subSet[subSet['clase'] == 'Dengue_NoGrave_NoSignos'].shape[0])
+                temp3.append(subSet[subSet['clase'] == 'Dengue_NoGrave_SignosAlarma'].shape[0])
+                temp4.append(subSet[subSet['clase'] == 'Dengue_Grave'].shape[0])
+            archivo= pd.DataFrame({ atributo: valores,
+                        'No Dengue': temp1,
+                        'No signos Alerta': temp2,
+                        'Signos Alerta': temp3,
+                        'Dengue  Grave': temp4})
+            archivo.to_excel(writer, sheet_name=atributo,index=False)
+        elif atributo in atributosContinuos: #Generar Grafica
+                plt.boxplot(x=datos[atributo],data= filtrado)
+                plt.title(atributo)
+                nombre="./GRAFICAS/"+atributo+".png"
+                plt.savefig(nombre)
+                plt.clf()
     print("Finalizado, revise la carpeta GRAFICAS")
     writer.save()
 
 #deficion de main#
 def main():
-   #archivo1 = sys.argv[1]
-    archivo1 = './DATA/clinica_train_synth_dengue.csv'
-    archivo2 = './DATA/laboratorio_train_synth_dengue.csv'
-    archivo3 = './DATA/completo_train_synth_dengue.csv'
-    datos1 = pd.read_csv(archivo1, engine='python')
-    datos2 = pd.read_csv(archivo2, engine='python')
-    datos3 = pd.read_csv(archivo3, engine='python')
-    #para ver informacion
-    #print("DATOS DE CLINICA")
-    tablas(datos1)
-   # print("-------------------------------------------------------------------")
-    #print("DATOS DE LAB")
-    #tablas(datos2) CON ESTE DA ERROR POR QUE NO TIENE LOS ATTR
-    #print("-------------------------------------------------------------------")
-    #print("DATOS DE CLINICA Y LAB")
-    #tablas(datos3)
+   #path = sys.argv[1]
+    #path = './DATA/clinica_train_synth_dengue.csv'
+    #path = './DATA/laboratorio_train_synth_dengue.csv'
+    path = './DATA/completo_train_synth_dengue.csv'
+    datos = pd.read_csv(path, engine='python')
+    datos=preprocesar(datos)
+    generar(datos)
 
 #solo inicia si es el proceso inicial#
 if __name__ == "__main__":
