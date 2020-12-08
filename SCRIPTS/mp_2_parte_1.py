@@ -2,21 +2,15 @@
 #       Claudia Cortés          11711357
 #       Ingrid Dominguez        11711355
 #
-#librerias#
+#librerias
+#Otras funciones
 import sys
-from time import time
 import numpy as np
-#manejo de archivos
+#Para Manejo de archivos
 import pandas as pd
 from pandas import ExcelWriter
-#graficas
+#para Generar graficas
 import matplotlib.pyplot as plt
-#sklearn
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.cluster import DBSCAN
-from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, mean_squared_error, r2_score
 
 def tablas(datos):
     #Lista de attributos discreto.
@@ -56,7 +50,7 @@ def tablas(datos):
         plt.title(atributo)
         nombre="./GRAFICAS/"+atributo+".png"
         plt.savefig(nombre)
-        #plt.show()
+        plt.clf()
 
     print("Finalizado, revise la carpeta GRAFICAS")
     writer.save()
@@ -71,11 +65,11 @@ def main():
     datos2 = pd.read_csv(archivo2, engine='python')
     datos3 = pd.read_csv(archivo3, engine='python')
     #para ver informacion
-    print("DATOS DE CLINICA")
+    #print("DATOS DE CLINICA")
     tablas(datos1)
    # print("-------------------------------------------------------------------")
     #print("DATOS DE LAB")
-    #tablas(datos2)
+    #tablas(datos2) CON ESTE DA ERROR POR QUE NO TIENE LOS ATTR
     #print("-------------------------------------------------------------------")
     #print("DATOS DE CLINICA Y LAB")
     #tablas(datos3)
@@ -83,13 +77,3 @@ def main():
 #solo inicia si es el proceso inicial#
 if __name__ == "__main__":
     main()
-
-    #random forest
-    #MSVMaquinas Soporte Vecto
-    #Bayesiano ingenuo
-
-    #Clases:
-    # No dengue
-    # Dengue no grave y sin isgos de alarma
-    #Dengue no grave con signos de alarma
-    #Dengue Grave
