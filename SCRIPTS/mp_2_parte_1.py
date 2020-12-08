@@ -22,6 +22,7 @@ def generar(datos):
     #Lista de attributos discreto.
     atributosContinuos = ["plaquetas","linfocitos","hematocritos","leucocitos"]
     atributos=list(datos.columns.values)
+    atributos.remove("clase") 
     #Se inicializa el lector del archivo
     writer = pd.ExcelWriter('./GRAFICAS/estadisticas.xlsx', engine = 'xlsxwriter')
     for atributo in atributos: 
