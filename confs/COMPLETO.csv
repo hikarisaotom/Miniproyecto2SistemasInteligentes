@@ -1,0 +1,16 @@
+criterio,arboles,profundidad,atributos
+entropy,46,10,auto
+gini,125,10,log2
+entropy,167,11,auto
+gini,63,11,log2
+entropy,76,13,auto
+gini,29,14,log2
+entropy,186,15,log2
+gini,33,16,log2
+entropy,54,16,auto
+gini,191,18,auto
+gini,31,20,auto
+gini,154,21,auto
+entropy,35,21,auto
+gini,95,21,auto
+gini,38,21,auto

@@ -8,14 +8,17 @@ import sys
 import numpy as np
 #Para Manejo de archivos
 import pandas as pd
+import csv
 #Random forest 
 from sklearn.ensemble import RandomForestClassifier
+
 #Para crear los sets del crossvalidation
 from sklearn.model_selection import train_test_split
+
 #Evaluar el rendimiento 
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.metrics import f1_score
+#from sklearn.metrics import classification_report, confusion_matrix Para visualizar de manera mas ordenada las estadisticas
 from sklearn.metrics import precision_recall_fscore_support as score
+
 
 def preprocesar(datos):
     datos=datos.replace(np.nan,2,regex=True)
@@ -32,7 +35,6 @@ def oneHot(datos):
 def getTags(datos):
     #Obtenemos los valores a predecir
     tags = np.array (datos ['clase'])
-   # tags= oneHot(tags)
     return tags
 
 def limpiarFeatures(datos):
@@ -41,60 +43,54 @@ def limpiarFeatures(datos):
     return datos   
 
 def creatSets(datos,tags,features):
-    ##VALORES A CAMBIAR 
-    #criterio='gini'
-   
-     #Sets para CrossValidation
-    entrenamiento1, prueba1, entrenamiento2, prueba2 = train_test_split(
-    datos, tags, test_size=0.50, random_state=66,shuffle=True) #dejamos el 50%  para prueba
+    #Sets para CrossValidation
+    entrenamiento1, prueba1, entrenamiento2, prueba2 = train_test_split(datos, tags, test_size=0.50, random_state=66,shuffle=True) #dejamos el 50%  para prueba
     #segunda ronda de sets
-    entrenamiento3, prueba3, entrenamiento4, prueba4 = train_test_split(
-    datos, tags, test_size=0.50, random_state=70,shuffle=True) #dejamos el 50%  para prueba
+    entrenamiento3, prueba3, entrenamiento4, prueba4 = train_test_split(datos, tags, test_size=0.50, random_state=70,shuffle=True) #dejamos el 50%  para prueba
     #Tercera ronda.
-    entrenamiento5, prueba5,entrenamiento6, prueba6 = train_test_split(
-    datos, tags, test_size=0.50, random_state=1,shuffle=True) #dejamos el 50%  para prueba
+    entrenamiento5, prueba5,entrenamiento6, prueba6 = train_test_split(datos, tags, test_size=0.50, random_state=1,shuffle=True) #dejamos el 50%  para prueba
     #Cuarta ronda.
-    entrenamiento7, prueba7,entrenamiento8, prueba8 = train_test_split(
-    datos, tags, test_size=0.50, random_state=1,shuffle=True) #dejamos el 50%  para prueba
+    entrenamiento7, prueba7,entrenamiento8, prueba8 = train_test_split(datos, tags, test_size=0.50, random_state=1,shuffle=True) #dejamos el 50%  para prueba
     #Quinta ronda.
-    entrenamiento9, prueba9,entrenamiento10, prueba10 = train_test_split(
-    datos, tags, test_size=0.50, random_state=1,shuffle=True) #dejamos el 50%  para prueba
-
+    entrenamiento9, prueba9,entrenamiento10, prueba10 = train_test_split(datos, tags, test_size=0.50, random_state=1,shuffle=True) #dejamos el 50%  para prueba
     tempsX=[entrenamiento1,entrenamiento3,entrenamiento5,entrenamiento7,entrenamiento9]
     tempsY=[entrenamiento2,entrenamiento4,entrenamiento6,entrenamiento8,entrenamiento10]
     tempsPred=[prueba1,prueba3,prueba5,prueba7,prueba9]
     TempsVal=[prueba2,prueba4,prueba6,prueba8,prueba10]
     F1Temps=[]
-    confs=[]
-    cont=0
-    for conf in range(15):
-        criterio='entropy'
-        arboles=200
-        profundidad=15
-        atributos=17
+
+    confs = pd.read_csv('./confs/CLINICA.csv',engine='python') #Cargar configuraciones
+    fd = open('./GRAFICAS/F_ONE.csv','a') #Salida de configuraciones
+    fd.write('Criterio,Arboles,Profundidad,Atributos\n')
+
+    for ind in range(2): 
+        criterio=str(confs['criterio'][ind])
+        arboles=int(confs['arboles'][ind])
+        profundidad=int(confs['profundidad'][ind])
+        atributos=str(confs['atributos'][ind])
         # Creacion del bosque
         bosque = RandomForestClassifier(criterion=criterio,
             n_estimators=arboles,
             max_depth=profundidad,
             max_features=atributos)
-        for i in range(5): 
+        F1Temps=[]
+        cont=0
+        print("Generando Random Forest para configuracion ",ind)
+        for j in range(5):
+            for i in range(5): 
+                cont=cont+1
                 bosque.fit(tempsX[i],tempsY[i])
                 #Predicciones y metricas
                 prediccion = bosque.predict(tempsPred[i]) 
-                print("------>ESTADISTICAS PARAEL RANDOM FOREST<------")
-                print(classification_report(TempsVal[i], prediccion))
-                precision,recall,fscore,support=score(TempsVal[i], prediccion,average='macro')
-                print('F-score   : {}'.format(fscore))
-                print('\n')
+                recision,recall,fscore,support=score(TempsVal[j], prediccion,average='macro')
                 F1Temps.append(fscore)
-    print("CONTADOR: ",cont)
- 
-              
-
-    
-
-    
-
+            
+            linea=criterio+','+str(arboles)+','+str(profundidad)+','+atributos+','+str(F1Temps).strip('[]')+'\n'
+            F1Temps=[]
+            fd.write("\n")
+            fd.write(linea)
+        
+    fd.close() 
     return datos
 
 #deficion de main#
@@ -115,6 +111,13 @@ def main():
     features = list (datos.columns)
     #print(datos.info())
     creatSets(datos,tags,features)
+
+    
+   
+
+
+
+
 
 
 #solo inicia si es el proceso inicial#
