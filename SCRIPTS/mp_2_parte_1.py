@@ -56,10 +56,7 @@ def generar(datos):
 
 #deficion de main#
 def main():
-   #path = sys.argv[1]
-    #path = './DATA/clinica_train_synth_dengue.csv'
-    #path = './DATA/laboratorio_train_synth_dengue.csv'
-    path = './DATA/completo_train_synth_dengue.csv'
+    path = sys.argv[1]
     datos = pd.read_csv(path, engine='python')
     datos=preprocesar(datos)
     generar(datos)
