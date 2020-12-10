@@ -21,7 +21,7 @@ def generar(datos):
     atributos=list(datos.columns.values)
     atributos.remove("clase") 
     #Se inicializa el lector del archivo
-    writer = pd.ExcelWriter('./GRAFICAS/estadisticas.xlsx', engine = 'xlsxwriter')
+    writer = pd.ExcelWriter('./Estadisticas/estadisticas.xlsx', engine = 'xlsxwriter')
     for atributo in atributos: 
         filtrado = datos[[atributo, "clase"]]
         temp1=[]
@@ -45,10 +45,10 @@ def generar(datos):
         elif atributo in atributosContinuos: #Generar Grafica
                 plt.boxplot(x=datos[atributo],data= filtrado)
                 plt.title(atributo)
-                nombre="./GRAFICAS/"+atributo+".png"
+                nombre="./Estadisticas/"+atributo+".png"
                 plt.savefig(nombre)
                 plt.clf()
-    print("Finalizado, revise la carpeta GRAFICAS")
+    print("Finalizado, revise la carpeta Estadisticas")
     writer.save()
 
 #deficion de main#

@@ -2,6 +2,7 @@
 import numpy as np
 #Manejo de archivos
 import pandas as pd
+import pickle
 #Para crear los sets del crossvalidation
 from sklearn.model_selection import train_test_split
 
@@ -48,13 +49,11 @@ def separar(datos,tags):
 
 def separarCompleto(datos,tags):
      #Sets para CrossValidation
-    entrenamiento1, prueba1, entrenamiento2, prueba2 = train_test_split(datos, tags, test_size=0.0000001, random_state=66,shuffle=True) #dejamos el 50%  para prueba
-    #segunda ronda de sets
-    print(entrenamiento1.shape)
-    print(prueba1.shape)
-    print(entrenamiento2.shape)
-    print(prueba2.shape)
-    return  entrenamiento1, prueba1, entrenamiento2, prueba2
+    entrenamiento1, prueba1, entrenamiento2, prueba2 = train_test_split(datos, tags, test_size=0.0000001, random_state=66,shuffle=True) 
+    #uniendolos 
+    train = pd.concat([entrenamiento1, prueba1])
+    test = np.concatenate((entrenamiento2, prueba2), axis=0)
+    return  train, test
 
 
 
@@ -74,3 +73,17 @@ def procesarDatos(datos,op):
 
 def cargarDatos(path):
     return pd.read_csv(path,engine='python')
+
+
+def GuardarBinario(objeto,ruta):
+    archivo = open(ruta, 'wb')
+    pickle.dump(objeto,archivo)
+    archivo.close()
+    print(ruta+" Fue salvado exitosamente")
+    
+
+def cargarBinario(ruta):
+    with open(ruta, 'rb') as archivo:
+        objeto = pickle.load(archivo)
+    archivo.close()
+    return objeto

@@ -22,7 +22,7 @@ def entrenar(Crosssets):
     TempsVal=Crosssets[3]
     F1Temps=[]
     confs = funciones.cargarDatos('./confs/configuraciones.csv') #Cargar configuraciones
-    fd = open('./GRAFICAS/Salida.csv','a') #Salida de configuraciones
+    fd = open('./Estadisticas/Salida.csv','a') #Salida de configuraciones
     fd.write('Criterio,Arboles,Profundidad,Atributos\n')
     for ind in confs.index: 
         criterio=str(confs['criterio'][ind])
@@ -46,7 +46,7 @@ def entrenar(Crosssets):
         fd.write("\n")
     fd.close() 
     print("--> Escritura exitosa. Datos de analisis generados en GRAFICAS/salida.csv")
-    return 0
+
 
 #deficion de main#
 def main():
