@@ -5,17 +5,14 @@
 #librerias
 #Otras funciones
 import sys
-import numpy as np
 #Para Manejo de archivos
 import pandas as pd
 from pandas import ExcelWriter
 #para Generar graficas
 import matplotlib.pyplot as plt
+#Para procesamiento de datos y demas.
+import funcionesUtiles as funciones
 
-def preprocesar(datos):
-    datos=datos.replace(np.nan,'NA',regex=True)
-    datos=datos.replace("NO","No",regex=True)
-    return datos
 
 
 def generar(datos):
@@ -56,9 +53,10 @@ def generar(datos):
 
 #deficion de main#
 def main():
-    path = sys.argv[1]
+    #path = sys.argv[1]
+    path = './DATA/completo_train_synth_dengue.csv'
     datos = pd.read_csv(path, engine='python')
-    datos=preprocesar(datos)
+    datos=funciones.preprocesar(datos)
     generar(datos)
 
 #solo inicia si es el proceso inicial#
