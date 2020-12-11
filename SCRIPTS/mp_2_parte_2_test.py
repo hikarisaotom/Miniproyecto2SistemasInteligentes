@@ -10,12 +10,11 @@ from sklearn.ensemble import RandomForestClassifier
 #Para procesamiento de datos y demas.
 import funcionesUtiles as funciones
 #Evaluar el rendimiento 
-from sklearn.metrics import classification_report, confusion_matrix
-def predecir(bosque,datos):
+from sklearn.svm import SVC as model
+
+def predecir(bosque,datos,tags):
     prediccion = bosque.predict(datos[0]) 
-    print("------>ESTADISTICAS PARAEL RANDOM FOREST<------")
-    print(classification_report(datos[1], prediccion))
-    
+    funciones.estats(tags,prediccion)
 
 #deficion de main
 def main():
@@ -24,9 +23,11 @@ def main():
     path = './DATA/completo_train_synth_dengue.csv'
     nombre="./Archivos_salida/salida"
     datos = funciones.cargarDatos(path)
+    tags=funciones.getTags(datos,1)
     procesado=funciones.procesarDatos(datos,2)
     bosque=funciones.cargarBinario(nombre+".rfc")
-    predecir(bosque,procesado)
+    predecir(bosque,procesado,tags)
+    
    
 
 #solo inicia si es el proceso inicial#

@@ -1,0 +1,16 @@
+kernel,C,Gamma
+rbf,1.00,scale
+linear,1.50,auto
+rbf,2.5,auto
+rbf,3.4,scale
+sigmoid,6.9,scale
+rbf,10.1,auto
+precomputed,5.9,scale
+rbf,5.7,scale
+sigmoid,5.9,scale
+rbf,5.2,auto
+rbf,4.6,auto
+rbf,6.7,scale
+rbf,9.5,scale
+rbf,2.2,auto
+rbf,6.9,scale

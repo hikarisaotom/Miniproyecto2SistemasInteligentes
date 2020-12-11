@@ -5,7 +5,10 @@ import pandas as pd
 import pickle
 #Para crear los sets del crossvalidation
 from sklearn.model_selection import train_test_split
-
+#Para estadisticas
+from sklearn.metrics import classification_report, confusion_matrix
+#Para normalizar
+from sklearn.preprocessing import StandardScaler
 def preprocesar(datos):
     datos=datos.replace(np.nan,2,regex=True)
     datos=datos.replace("NO","No",regex=True)
@@ -19,8 +22,13 @@ def oneHot(datos):
     numpy = np.array (datos)
     return datos
 
-def getTags(datos):
+def getTags(datos,n ):
     #Obtenemos los valores a predecir
+    if n ==2:
+        datos = datos.replace("Dengue_Grave", "0", regex=True)
+        datos = datos.replace("Dengue_NoGrave_NoSignos", "1", regex=True)
+        datos = datos.replace("Dengue_NoGrave_SignosAlarma", "2", regex=True)
+        datos = datos.replace("No_Dengue", "3", regex=True)
     tags = np.array (datos ['clase'])
     return tags
 
@@ -30,7 +38,7 @@ def limpiarFeatures(datos):
     return datos
 
 def separar(datos,tags):
-     #Sets para CrossValidation
+    #Sets para CrossValidation
     entrenamiento1, prueba1, entrenamiento2, prueba2 = train_test_split(datos, tags, test_size=0.50, random_state=66,shuffle=True) #dejamos el 50%  para prueba
     #segunda ronda de sets
     entrenamiento3, prueba3, entrenamiento4, prueba4 = train_test_split(datos, tags, test_size=0.50, random_state=70,shuffle=True) #dejamos el 50%  para prueba
@@ -60,7 +68,7 @@ def separarCompleto(datos,tags):
 def procesarDatos(datos,op):
     datos=preprocesar(datos)
     # Valores a predecir 
-    tags=getTags(datos)
+    tags=getTags(datos,1)
     #Limpiando y eliminando columnas de resultados
     datos=limpiarFeatures(datos)
     #one hot encoding de los demas attrs
@@ -69,7 +77,30 @@ def procesarDatos(datos,op):
         return separar(datos,tags)
     else: 
         return separarCompleto(datos,tags)
-    
+
+def normalizar(datos):
+    scaler = StandardScaler()
+    transformados = scaler.fit_transform(datos)
+    datos = pd.DataFrame(transformados)
+    return datos
+
+def procesarDatosNormalizados(datos):
+    datos=preprocesar(datos)
+    # Valores a predecir 
+    tags=getTags(datos,2)
+    #Limpiando y eliminando columnas de resultados
+    datos=limpiarFeatures(datos)
+    #one hot encoding de los demas attrs
+    datos=oneHot(datos)
+    #Normalizando datos
+    datos=normalizar(datos)
+    separados=separar(datos,tags)
+ 
+    return separados
+
+
+
+
 
 def cargarDatos(path):
     return pd.read_csv(path,engine='python')
@@ -87,3 +118,14 @@ def cargarBinario(ruta):
         objeto = pickle.load(archivo)
     archivo.close()
     return objeto
+
+def estats(tags, prediccion):
+    print("------>ESTADISTICAS<------")
+    print(classification_report(tags, prediccion))
+    print("------>MATRIZ CONFUSION<------")
+    labels=["Dengue_Grave","Dengue_NoGrave_NoSignos","Dengue_NoGrave_SignosAlarma","No_Dengue"]
+    vals = confusion_matrix(tags, prediccion)
+    print('{0:50} {1:8} {2:8} {3:8} {4:8}'.format(" clase ","   tn", "   fp", "     fn","    tp"))
+    for i in range(4):
+        val=vals[i]
+        print('{0:50} {1:8} {2:8} {3:8} {4:8}'.format(labels[i],val[0], val[1], val[2], val[3]))
