@@ -5,6 +5,7 @@
 #librerias
 import sys
 import numpy as np
+import pandas as pd
 #Para Manejo de archivos
 import csv
 #Random forest 
@@ -22,7 +23,7 @@ def entrenar(Crosssets):
     F1Temps=[]
     confs = funciones.cargarDatos('./confs/configuraciones.csv') #Cargar configuraciones
     fd = open('./Estadisticas/Salida.csv','a') #Salida de configuraciones
-    fd.write('Criterio,Arboles,Profundidad,Atributos\n')
+    fd.write('Criterio,Arboles,Profundidad,Atributos,p1,p2,p3,p4,p5\n')
     for ind in confs.index: 
         criterio=str(confs['criterio'][ind])
         arboles=int(confs['arboles'][ind])
@@ -33,15 +34,21 @@ def entrenar(Crosssets):
         F1Temps=[]
         print("Generando Random Forest para configuracion ",ind)
         for j in range(5):
-            for i in range(5): 
-                bosque.fit(tempsX[i],tempsY[i])
+            F1Temps=[]
+            for p in range(5):
+                train=[]
+                test=[]
+                for i in range(5): 
+                    if(i!=j):
+                        train = pd.concat([tempsX[i], tempsPred[i]])
+                        test = np.concatenate((tempsY[i], TempsVal[i]), axis=0)
+                bosque.fit(train,test)
                 #Predicciones y metricas
-                prediccion = bosque.predict(tempsPred[i]) 
+                prediccion = bosque.predict(tempsPred[j]) 
                 fscore=score(TempsVal[j], prediccion,average='macro')
                 F1Temps.append(fscore[2])
-            linea=criterio+','+str(arboles)+','+str(profundidad)+','+atributos+','+str(F1Temps).strip('[]')+'\n'
-            F1Temps=[]
-            fd.write(linea)
+        linea=criterio+','+str(arboles)+','+str(profundidad)+','+atributos+','+str(F1Temps).strip('[]')+'\n'
+        fd.write(linea)
         fd.write("\n")
     fd.close() 
     print("--> Escritura exitosa. Datos de analisis generados en GRAFICAS/salida.csv")
@@ -53,6 +60,7 @@ def main():
     path = './DATA/completo_train_synth_dengue.csv'
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatos(datos,1)
+    print("Iniciando....")
     entrenar(procesado)
 
 #solo inicia si es el proceso inicial#
