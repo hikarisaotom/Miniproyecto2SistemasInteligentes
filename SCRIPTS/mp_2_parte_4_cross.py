@@ -87,7 +87,7 @@ def generarStats(Crosssets):
 #deficion de main#
 
 def main():
-    #path = sys.argv[1]
+    path = sys.argv[1]
     path = './DATA/laboratorio_train_synth_dengue.csv'
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatosNormalizados(datos,1)

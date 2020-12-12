@@ -25,11 +25,6 @@ def entrenar(Datos):
 def main():
     path = sys.argv[1]
     nombre = sys.argv[2]
-    #path = './DATA/completo_train_synth_dengue.csv'
-    #path = './DATA/clinica_train_synth_dengue.csv'
-    #path = './DATA/laboratorio_train_synth_dengue.csv'
-    #path = './DATA/completo_train_synth_dengue.csv'
-    #nombre="./Archivos_salida/laboratorio"
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatos(datos,2)
     bosque=entrenar(procesado)

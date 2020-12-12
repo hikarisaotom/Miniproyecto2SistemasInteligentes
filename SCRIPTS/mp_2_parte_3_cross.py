@@ -52,8 +52,7 @@ def entrenar(Crosssets):
 
 
 def main():
-    #path = sys.argv[1]
-    path = './DATA/completo_train_synth_dengue.csv'
+    path = sys.argv[1]
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatosNormalizados(datos,1)
     entrenar(procesado)

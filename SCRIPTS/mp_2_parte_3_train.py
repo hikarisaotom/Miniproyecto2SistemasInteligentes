@@ -19,12 +19,7 @@ def entrenar(Datos):
 #deficion de main
 def main():
     path = sys.argv[1]
-    path = sys.argv[2]
-    #path = './DATA/completo_train_synth_dengue.csv'
-    #path = './DATA/clinica_train_synth_dengue.csv'
-    #path = './DATA/laboratorio_train_synth_dengue.csv'
-    #path = './DATA/completo_train_synth_dengue.csv'
-    #nombre="./Archivos_salida/laboratorio"
+    nombre = sys.argv[2]
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatosNormalizados(datos,2)
     modeloSVM=entrenar(procesado)
