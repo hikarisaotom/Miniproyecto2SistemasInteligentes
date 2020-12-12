@@ -27,10 +27,9 @@ def Categorical(Crosssets,tags):
     print("--------------------------->Categorical<---------------------------")
     naiveCate= CategoricalNB()
     naiveCate.fit(tempsX[0].abs(), tempsY[0])
-    print("ENTRA?")
     prediccion = naiveCate.predict(tempsPred[0].abs()) 
-    print("ERROR AQUI?")
     fscore=score(TempsVal[0], prediccion,average='macro')
+    funciones.estats(TempsVal[0], prediccion)
     print(" Categorical: F-1 ",fscore[0])
 
 def Gausiano(Crosssets,tags):
@@ -72,7 +71,6 @@ def main():
     Gausiano(procesado,tags)
     Bernoulli(procesado,tags)
 
-#Gausiano(GaussianNB), Bernoulli (BernoulliNB), y Categórico (CategoricalNB)
 
 #solo inicia si es el proceso inicial#
 if __name__ == "__main__":
