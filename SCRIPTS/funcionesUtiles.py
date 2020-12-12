@@ -131,3 +131,4 @@ def estats(tags, prediccion):
     for i in range(4):
         val=vals[i]
         print('{0:50} {1:8} {2:8} {3:8} {4:8}'.format(labels[i],val[0], val[1], val[2], val[3]))
+    
