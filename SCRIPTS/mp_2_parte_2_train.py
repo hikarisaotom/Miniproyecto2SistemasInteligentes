@@ -14,18 +14,22 @@ def entrenar(Datos):
     X=Datos[0]
     Y=Datos[1]
     bosque = RandomForestClassifier(
-        criterion='entropy',
-        n_estimators=46,
-        max_depth=10,
+        criterion='gini',
+        n_estimators=154,
+        max_depth=21,
         max_features='auto')
+        		
     return bosque.fit(X,Y)
 
 #deficion de main
 def main():
-    #path = sys.argv[1]
-    #path = sys.argv[2]
-    path = './DATA/completo_train_synth_dengue.csv'
-    nombre="./Archivos_salida/salida"
+    path = sys.argv[1]
+    nombre = sys.argv[2]
+    #path = './DATA/completo_train_synth_dengue.csv'
+    #path = './DATA/clinica_train_synth_dengue.csv'
+    #path = './DATA/laboratorio_train_synth_dengue.csv'
+    #path = './DATA/completo_train_synth_dengue.csv'
+    #nombre="./Archivos_salida/laboratorio"
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatos(datos,2)
     bosque=entrenar(procesado)

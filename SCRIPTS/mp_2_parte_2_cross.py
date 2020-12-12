@@ -24,6 +24,7 @@ def entrenar(Crosssets):
     confs = funciones.cargarDatos('./confs/configuraciones.csv') #Cargar configuraciones
     fd = open('./Estadisticas/Salida.csv','a') #Salida de configuraciones
     fd.write('Criterio,Arboles,Profundidad,Atributos,p1,p2,p3,p4,p5\n')
+  
     for ind in confs.index: 
         criterio=str(confs['criterio'][ind])
         arboles=int(confs['arboles'][ind])
@@ -36,28 +37,28 @@ def entrenar(Crosssets):
         for j in range(5):
             F1Temps=[]
             for p in range(5):
-                train=[]
-                test=[]
+                X=[]
+                Y=[]
                 for i in range(5): 
                     if(i!=j):
-                        train = pd.concat([tempsX[i], tempsPred[i]])
-                        test = np.concatenate((tempsY[i], TempsVal[i]), axis=0)
-                bosque.fit(train,test)
+                        X = pd.concat([tempsX[i], tempsPred[i]])
+                        Y = np.concatenate((tempsY[i], TempsVal[i]), axis=0)
+                bosque.fit(X,Y)
                 #Predicciones y metricas
                 prediccion = bosque.predict(tempsPred[j]) 
                 fscore=score(TempsVal[j], prediccion,average='macro')
                 F1Temps.append(fscore[2])
-        linea=criterio+','+str(arboles)+','+str(profundidad)+','+atributos+','+str(F1Temps).strip('[]')+'\n'
-        fd.write(linea)
+            linea=criterio+','+str(arboles)+','+str(profundidad)+','+atributos+','+str(F1Temps).strip('[]')+'\n'
+            fd.write(linea)
         fd.write("\n")
     fd.close() 
-    print("--> Escritura exitosa. Datos de analisis generados en GRAFICAS/salida.csv")
+    print("--> Escritura exitosa. Datos de analisis generados en Estadisticas/salida.csv")
 
 
 #deficion de main#
 def main():
-    #path = sys.argv[1]
-    path = './DATA/completo_train_synth_dengue.csv'
+    path = sys.argv[1]
+    #path = './DATA/laboratorio_train_synth_dengue.csv'
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatos(datos,1)
     print("Iniciando....")

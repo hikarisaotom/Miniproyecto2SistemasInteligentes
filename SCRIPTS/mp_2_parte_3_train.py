@@ -2,7 +2,7 @@
 #       Claudia Cortés          11711357
 #       Ingrid Dominguez        11711355
 #
-
+import sys
 #Para procesamiento de datos y demas.
 import funcionesUtiles as funciones
 #Para SVC
@@ -13,15 +13,18 @@ from sklearn.metrics import precision_recall_fscore_support as score
 def entrenar(Datos):
     X=Datos[0]
     Y=Datos[1]
-    model = SVC( C = 3.4,kernel = 'rbf',gamma = 'scale')
+    model = SVC( C = 1,kernel = 'rbf',gamma = 'scale')
     return model.fit(X,Y)
 
 #deficion de main
 def main():
-    #path = sys.argv[1]
-    #path = sys.argv[2]
-    path = './DATA/completo_train_synth_dengue.csv'
-    nombre="./Archivos_salida/salida"
+    path = sys.argv[1]
+    path = sys.argv[2]
+    #path = './DATA/completo_train_synth_dengue.csv'
+    #path = './DATA/clinica_train_synth_dengue.csv'
+    #path = './DATA/laboratorio_train_synth_dengue.csv'
+    #path = './DATA/completo_train_synth_dengue.csv'
+    #nombre="./Archivos_salida/laboratorio"
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatosNormalizados(datos,2)
     modeloSVM=entrenar(procesado)

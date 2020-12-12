@@ -16,8 +16,10 @@ def predecir(bosque,datos,tags):
 def main():
     #path = sys.argv[1]
     #path = sys.argv[2]
-    path = './DATA/completo_train_synth_dengue.csv'
-    nombre="./Archivos_salida/salida"
+    #path = './DATA/test/clinica_test_synth_dengue.csv'
+    #path = './DATA/test/laboratorio_test_synth_dengue.csv'
+    path = './DATA/test/completo_test_synth_dengue.csv'
+    nombre="./Archivos_salida/completo"
     datos = funciones.cargarDatos(path)
     tags=funciones.getTags(datos,2)
     procesado=funciones.procesarDatosNormalizados(datos,2)
