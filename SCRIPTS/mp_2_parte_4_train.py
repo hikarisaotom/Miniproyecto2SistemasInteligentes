@@ -20,12 +20,12 @@ def Categorical(Datos):
 
 def Gausiano(Datos):
     naiveGausiano = GaussianNB()
-    return naiveGausiano.fit(Datos[0].abs(), Datos[1])
+    return naiveGausiano.fit(Datos[0], Datos[1])
 
 
 def Bernoulli(Datos):
     naiveBerno = BernoulliNB()
-    return naiveBerno.fit(Datos[0].abs(), Datos[1])
+    return naiveBerno.fit(Datos[0], Datos[1])
 
 #deficion de main
 def main():
@@ -35,7 +35,7 @@ def main():
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatosNormalizados(datos,2)
     opcion=[]
-    bandera=True
+    bandera=False
     if naive==1:#Categorical
         opcion=Categorical(procesado)
     elif naive==2:#Bernoulli
@@ -46,8 +46,8 @@ def main():
         print("Opcion Invalida.")
         bandera=False
     if bandera:
-            print("NAIVE Entrenado Exitosamente")
-            funciones.GuardarBinario(opcion,nombre+".nb")
+        print("NAIVE Entrenado Exitosamente")
+        funciones.GuardarBinario(opcion,nombre+str(naive)+".nb")
 
 #solo inicia si es el proceso inicial#
 if __name__ == "__main__":

@@ -43,30 +43,20 @@ def Bernoulli(datos,modelo):
     
 #deficion de main
 def main():
-    #path = sys.argv[1]
-    #naive=sys.argv[2]
-    #nombre = sys.argv[3]
-
-    naive=1
-    #path = './DATA/completo_train_synth_dengue.csv'
-    #path = './DATA/clinica_train_synth_dengue.csv'
-    path = './DATA/laboratorio_train_synth_dengue.csv'
-    #path = './DATA/completo_train_synth_dengue.csv'
-    nombre="./Archivos_salida/laboratorio_Categorical"
-
+    path = sys.argv[1]
+    naive=sys.argv[2]
+    nombre = sys.argv[3]
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatosNormalizados(datos,2)
     modelo=funciones.cargarBinario(nombre+".nb")
-    bandera=True
     if naive==1:#Categorical
         opcion=Categorical(procesado,modelo)
     elif naive==2:#Bernoulli
-        opcion=Bernoulli(procesado,modelo)
+         opcion=Bernoulli(procesado,modelo)
     elif naive==3:#Gausiano
         opcion=Gausiano(procesado,modelo)
     else:
         print("Opcion Invalida.")
-        bandera=False
    
 
 #solo inicia si es el proceso inicial#
