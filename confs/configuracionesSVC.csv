@@ -5,7 +5,7 @@ rbf,2.5,auto
 rbf,3.4,scale
 sigmoid,6.9,scale
 rbf,10.1,auto
-precomputed,5.9,scale
+rbf,5.9,scale
 rbf,5.7,scale
 sigmoid,5.9,scale
 rbf,5.2,auto

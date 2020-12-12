@@ -26,7 +26,7 @@ def entrenar(Crosssets):
     confs = funciones.cargarDatos('./confs/configuracionesSVC.csv') #Cargar configuraciones
     fd = open('./Estadisticas/SalidaSVC.csv','a') #Salida de configuraciones
     fd.write('kernel,C,Gamma\n')
-    for ind in range(1): #confs.index
+    for ind in confs.index: #
         kern=str(confs['kernel'][ind])
         c=float(confs['C'][ind])
         Gam=str(confs['Gamma'][ind])
@@ -45,14 +45,14 @@ def entrenar(Crosssets):
             F1Temps=[]
             fd.write(linea)
         fd.write("\n")
-    fd.close() 
+    fd.close()
     print("--> Escritura exitosa. Datos de analisis generados en GRAFICAS/salidaSVC.csv")
         
 
 
 def main():
     #path = sys.argv[1]
-    path = './DATA/completo_train_synth_dengue.csv'
+    path = './DATA/laboratorio_train_synth_dengue.csv'
     datos = funciones.cargarDatos(path)
     procesado=funciones.procesarDatosNormalizados(datos)
     entrenar(procesado)
