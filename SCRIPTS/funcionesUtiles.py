@@ -122,9 +122,9 @@ def cargarBinario(ruta):
     return objeto
 
 def estats(tags, prediccion):
-    print("------>ESTADISTICAS<------")
+    print("---->Estadisticas")
     print(classification_report(tags, prediccion))
-    print("------>MATRIZ CONFUSION<------")
+    print("---->Matriz de Confusión")
     labels=["Dengue_Grave","Dengue_NoGrave_NoSignos","Dengue_NoGrave_SignosAlarma","No_Dengue"]
     vals = confusion_matrix(tags, prediccion)
     print('{0:50} {1:8} {2:8} {3:8} {4:8}'.format(" clase ","   tn", "   fp", "     fn","    tp"))
