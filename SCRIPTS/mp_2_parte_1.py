@@ -3,7 +3,6 @@
 #       Ingrid Dominguez        11711355
 #
 #librerias
-#Otras funciones
 import sys
 #Para Manejo de archivos
 import pandas as pd
@@ -12,8 +11,6 @@ from pandas import ExcelWriter
 import matplotlib.pyplot as plt
 #Para procesamiento de datos y demas.
 import funcionesUtiles as funciones
-
-
 
 def generar(datos):
     #Lista de attributos discreto.

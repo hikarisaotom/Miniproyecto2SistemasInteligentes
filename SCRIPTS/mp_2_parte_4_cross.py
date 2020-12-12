@@ -7,65 +7,37 @@ import sys
 import numpy as np
 #Para Manejo de archivos
 import pandas as pd
-# importing necessary libraries 
-from sklearn import datasets 
-from sklearn.metrics import confusion_matrix 
-from sklearn.model_selection import train_test_split 
+#Para procesamiento de datos y demas.
+import funcionesUtiles as funciones
+
 #Naive Bayes
-from sklearn.preprocessing import OrdinalEncoder
+from sklearn.naive_bayes import GaussianNB
 
-def Gausiano(datos):
-    enc = OrdinalEncoder()
-    X = [['Male', 1], ['Female', 3], ['Female', 2]]
-    enc.fit(X)
-    return 0
+#metricas
+from sklearn.metrics import precision_recall_fscore_support as score
 
-def Bernoulli():
-    return 0
-
-def CategoricalNB():
-    return 0
-
-def preprocesar(datos):
-    datos=datos.replace(np.nan,2,regex=True)
-    datos=datos.replace("NO","No",regex=True)
-    return datos
-
-def oneHot(datos):
-    #One hot encoding
-    datos = pd.get_dummies (datos)
-    # Convertir a características de matriz 
-    numpy = np.array (datos)
-    return datos
-
-def getTags(datos):
-    #Convertimos todo en un arreglo
-    tags1 = np.array (datos ['clase'])
-    return oneHot(tags1)
-
-def limpiarFeatures(datos):
-    # Elimina las etiquetas de las columnas
-    datos = datos.drop ('clase', axis = 1)
-    return datos   
-
+def entrenar(Crosssets):
+    tempsX=Crosssets[0]
+    tempsY=Crosssets[1]
+    tempsPred=Crosssets[2]
+    TempsVal=Crosssets[3]
+    F1Temps=[]
+    naive = GaussianNB()
+    naive.fit(tempsX[0], tempsY[0])
+    prediccion = naive.predict(tempsPred[0]) 
+    fscore=score(TempsVal[0], prediccion,average='macro')
+    F1Temps.append(fscore[0])
+    print(F1Temps)
+   
 
 #deficion de main#
 def main():
-   #path = sys.argv[1]
-    #path = './DATA/clinica_train_synth_dengue.csv'
-    #path = './DATA/laboratorio_train_synth_dengue.csv'
+    #path = sys.argv[1]
     path = './DATA/completo_train_synth_dengue.csv'
-    datos = pd.read_csv(path, engine='python')
-    datos=preprocesar(datos)
-    # Valores a predecir 
-    tags=getTags(datos)
-     #Limpiando y eliminando columnas de resultados
-    datos=limpiarFeatures(datos)
-    #one hot encoding de los demas attrs
-    datos=oneHot(datos)
-    # Lista de Features 
-    features = list (datos.columns)
-    print(datos.info())
+    datos = funciones.cargarDatos(path)
+    procesado=funciones.procesarDatosNormalizados(datos,1)
+    entrenar(procesado)
+    print("SALE")
 
 #Gausiano(GaussianNB), Bernoulli (BernoulliNB), y Categórico (CategoricalNB)
 

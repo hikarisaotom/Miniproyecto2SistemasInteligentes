@@ -11,7 +11,6 @@ import csv
 from sklearn.ensemble import RandomForestClassifier
 #Evaluar el rendimiento 
 from sklearn.metrics import precision_recall_fscore_support as score
-
 #Para procesamiento de datos y demas.
 import funcionesUtiles as funciones
 
