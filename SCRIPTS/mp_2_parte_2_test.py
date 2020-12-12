@@ -9,8 +9,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 #Para procesamiento de datos y demas.
 import funcionesUtiles as funciones
-#Evaluar el rendimiento 
-from sklearn.svm import SVC as model
+
 
 def predecir(bosque,datos,tags):
     prediccion = bosque.predict(datos[0]) 

@@ -8,8 +8,6 @@
 #       Ingrid Dominguez        11711355
 #
 
-#Para evaluacion de resultados 
-from sklearn.metrics import confusion_matrix
 #Para procesamiento de datos y demas.
 import funcionesUtiles as funciones
 #Para SVC

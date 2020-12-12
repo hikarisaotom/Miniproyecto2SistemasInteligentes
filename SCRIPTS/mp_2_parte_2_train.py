@@ -10,8 +10,6 @@ from sklearn.ensemble import RandomForestClassifier
 #Para procesamiento de datos y demas.
 import funcionesUtiles as funciones
 
-
-
 def entrenar(Datos):
     X=Datos[0]
     Y=Datos[1]

@@ -84,7 +84,7 @@ def normalizar(datos):
     datos = pd.DataFrame(transformados)
     return datos
 
-def procesarDatosNormalizados(datos):
+def procesarDatosNormalizados(datos, op):
     datos=preprocesar(datos)
     # Valores a predecir 
     tags=getTags(datos,2)
@@ -94,9 +94,11 @@ def procesarDatosNormalizados(datos):
     datos=oneHot(datos)
     #Normalizando datos
     datos=normalizar(datos)
-    separados=separar(datos,tags)
- 
-    return separados
+    if op==1:
+        return separar(datos,tags)
+    else: 
+        return separarCompleto(datos,tags)
+
 
 
 
